@@ -1,0 +1,9 @@
+﻿@using ReactiveUI
+
+
+<MudMenuItem Icon="@Icons.Material.Filled.Delete" OnClick="() => MessageBus.Current.SendMessage(new InitDeleteActionMessage(EntityId))">Delete</MudMenuItem>
+
+@code {
+    [Parameter, EditorRequired]
+    public int EntityId { get; set; } = default!;
+}

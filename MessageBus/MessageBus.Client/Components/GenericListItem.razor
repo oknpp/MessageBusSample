@@ -1,0 +1,19 @@
+﻿@using MessageBusSample.Client.Services
+@using MessageBusSample.Client.Components.Actions
+
+<MudStack Row AlignItems="AlignItems.Start">
+    <MudIcon Icon="@Entity.Icon" />
+    <MudText>@Entity.Name</MudText>
+    <MudMenu Dense Class="ml-auto" Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small">
+        <DeleteAction EntityId="@Entity.Id"></DeleteAction>
+        <MudMenuItem>Edit</MudMenuItem>
+        <MudMenuItem>View</MudMenuItem>
+        <MudMenuItem>Rename</MudMenuItem>
+    </MudMenu>
+</MudStack>
+
+
+@code {
+    [Parameter, EditorRequired]
+    public Entity Entity { get; set; } = default!;
+}

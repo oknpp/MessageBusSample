@@ -1,0 +1,32 @@
+﻿@page "/lists"
+
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender:false))
+
+@using MessageBusSample.Client.Components;
+
+<h3>ListsPage</h3>
+
+<MudGrid>
+    <MudItem xs="6">
+        <CheckedOutList></CheckedOutList>
+    </MudItem>
+    <MudItem xs="6">
+        <CurrentList></CurrentList>
+    </MudItem>
+    <MudItem xs="4">
+        <DeletedList />
+    </MudItem>
+    <MudItem xs="4">
+        <ReadOnlyList></ReadOnlyList>
+    </MudItem>
+    <MudItem xs="4">
+        <ViewedList></ViewedList>
+    </MudItem>
+</MudGrid>
+
+<MudPopoverProvider />
+
+@code {
+    List<string> dummyItems = new List<string> { "Item 1", "Item 2", "Item 3" };
+
+}

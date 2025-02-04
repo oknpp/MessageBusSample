@@ -1,0 +1,54 @@
+﻿@using ReactiveUI
+@using MessageBusSample.Client.Components.Actions
+
+@implements IDisposable
+
+@typeparam T
+
+<MudPaper>
+    <MudCard>
+        <MudCardHeader>
+            <MudText Typo="Typo.h5">
+                @Title
+            </MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <div class="scrollable-list">
+                <MudVirtualize Items="@GetItems()">
+                    @ListItemContent(context)
+                </MudVirtualize>
+            </div>
+        </MudCardContent>
+    </MudCard>
+</MudPaper>
+
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter, EditorRequired]
+    public Func<List<T>> GetItems { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public RenderFragment<T> ListItemContent { get; set; } = null!;
+
+    IDisposable? _subscription;
+
+    protected override void OnInitialized()
+    {
+        _subscription = MessageBus.Current.Listen<ResolvedDeleteActionMessage>().Subscribe(message =>
+            {
+                InvokeAsync(StateHasChanged);
+                Console.WriteLine($"Received ResolvedDeleteActionMessage for {message.EntityId}");
+            });
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        // Clean up resources
+        _subscription?.Dispose();
+        Console.WriteLine("Component disposed!");
+    }
+}

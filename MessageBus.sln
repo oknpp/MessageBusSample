@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBusSample", "MessageBus\MessageBus\MessageBusSample.csproj", "{4F7DA26F-AF5F-4631-8DE6-8AB50C9A9BDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBusSample.Client", "MessageBus\MessageBus.Client\MessageBusSample.Client.csproj", "{D860D5C4-6560-4AEB-B6E9-7988A9B161E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F7DA26F-AF5F-4631-8DE6-8AB50C9A9BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F7DA26F-AF5F-4631-8DE6-8AB50C9A9BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F7DA26F-AF5F-4631-8DE6-8AB50C9A9BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F7DA26F-AF5F-4631-8DE6-8AB50C9A9BDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D860D5C4-6560-4AEB-B6E9-7988A9B161E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D860D5C4-6560-4AEB-B6E9-7988A9B161E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D860D5C4-6560-4AEB-B6E9-7988A9B161E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D860D5C4-6560-4AEB-B6E9-7988A9B161E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

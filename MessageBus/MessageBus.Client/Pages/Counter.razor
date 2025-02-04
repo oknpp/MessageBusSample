@@ -1,0 +1,23 @@
+﻿@page "/counter"
+
+@using MessageBusSample.Client.ViewModels
+@using MudBlazor
+
+@* @rendermode @(new InteractiveWebAssemblyRenderMode(prerender:false)) *@
+@rendermode InteractiveWebAssembly
+
+@inject CounterViewModel ViewModel
+
+<PageTitle>Counter</PageTitle>
+
+<MudContainer>
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h4">Counter</MudText>
+            <MudText Typo="Typo.body1">Current count: @ViewModel.Count</MudText>
+            <MudButton OnClick="() => ViewModel.IncrementCountCommand.Execute().Subscribe()" Color="Color.Primary">
+                Click me
+            </MudButton>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>

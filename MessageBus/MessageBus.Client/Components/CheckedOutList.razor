@@ -1,0 +1,12 @@
+﻿@using MessageBusSample.Client.Services
+@inject EntityService EntityService
+
+<GenericList GetItems="GetCheckedOut" Title="CheckedOut">
+    <ListItemContent>
+        <GenericListItem Entity="context"></GenericListItem>
+    </ListItemContent>
+</GenericList>
+
+@code {
+    Func<List<Entity>> GetCheckedOut => () => EntityService.GetCheckedOut;
+}
