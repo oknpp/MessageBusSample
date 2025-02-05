@@ -1,9 +1,16 @@
-﻿@using MessageBusSample.Client.Services
+﻿@using MessageBusSample.Client.Components.Actions.Rename
+@using MessageBusSample.Client.Services
 @inject EntityService EntityService
 
 <GenericList GetItems="GetCurrent" Title="Current">
     <ListItemContent>
-        <GenericListItem Entity="context"></GenericListItem>
+        <GenericListItem Entity="context">
+            <MenuContent>
+                <MudMenuItem>Edit</MudMenuItem>
+                <MudMenuItem>View</MudMenuItem>
+                <RenameAction EntityId="@context.Id" />
+            </MenuContent>
+        </GenericListItem>
     </ListItemContent>
 </GenericList>
 

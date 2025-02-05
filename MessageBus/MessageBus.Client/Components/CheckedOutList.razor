@@ -1,10 +1,20 @@
-﻿@using MessageBusSample.Client.Services
+﻿@using MessageBusSample.Client.Components.Actions
+@using MessageBusSample.Client.Components.Actions.Rename
+@using MessageBusSample.Client.Services
 @inject EntityService EntityService
 
 <GenericList GetItems="GetCheckedOut" Title="CheckedOut">
     <ListItemContent>
-        <GenericListItem Entity="context"></GenericListItem>
+        <GenericListItem Entity="context">
+            <MenuContent>
+                <DeleteAction EntityId="@context.Id"></DeleteAction>
+                <RenameAction EntityId="@context.Id" />
+                <MudMenuItem>View</MudMenuItem>
+                <MudMenuItem>Edit</MudMenuItem>
+            </MenuContent>
+        </GenericListItem>
     </ListItemContent>
+
 </GenericList>
 
 @code {

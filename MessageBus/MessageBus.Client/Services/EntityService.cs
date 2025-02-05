@@ -62,7 +62,19 @@ public class EntityService
             Icons.Material.Filled.Favorite,
             Icons.Material.Filled.Settings,
             Icons.Material.Filled.Face,
-            Icons.Material.Filled.ThumbUp
+            Icons.Material.Filled.ThumbUp,
+            Icons.Material.Filled.Gamepad,
+            Icons.Material.Filled.Flight,
+            Icons.Material.Filled.Folder,
+            Icons.Material.Filled.Girl,
+            Icons.Material.Filled.Group,
+            Icons.Material.Filled.House,
+            Icons.Material.Filled.Info,
+            Icons.Material.Filled.Keyboard,
+            Icons.Material.Outlined.GetApp,
+            Icons.Material.Outlined.Gif,
+            Icons.Material.Outlined.Grade,
+            Icons.Material.Outlined.Gite,
         };
 
         var faker = new Faker<Entity>()
