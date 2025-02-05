@@ -38,7 +38,7 @@ public class EntityService
         if (toRename != null)
         {
             toRename.Name = newName;
-            MessageBus.Current.SendMessage(new ResolveRenameActionMessage());
+            MessageBus.Current.SendMessage(new ResolveRenameActionMessage(toRename.Id));
         }
     }
 
@@ -93,12 +93,23 @@ public class EntityService
     }
 
 
-    public List<Entity> GetCheckedOut => DummyItems.Where(e => e.IsCheckedOut && !e.IsDeleted).ToList();
-    public List<Entity> GetCurrent => DummyItems.Where(e => e.IsCurrent && !e.IsDeleted).ToList();
-    public List<Entity> GetDeleted => DummyItems.Where(e => e.IsDeleted).ToList();
-    public List<Entity> GetViewed => DummyItems.Where(e => e.WasViewed && !e.IsDeleted).ToList();
-    public List<Entity> GetReadOnly => DummyItems.Where(e => e.ReadOnly && !e.IsDeleted).ToList();
+    public async Task<List<Entity>> GetCheckedOut()
+    {
+        var entities = await GetEntitiesAsync();
+        return entities.Where(e => e.IsCheckedOut && !e.IsDeleted).ToList();
+    }
 
+    public async Task<List<Entity>> GetCurrent() => (await GetEntitiesAsync()).Where(e => e.IsCurrent && !e.IsDeleted).ToList();
+    public async Task<List<Entity>> GetDeleted() => (await GetEntitiesAsync()).Where(e => e.IsDeleted).ToList();
+    public async Task<List<Entity>> GetViewed() => (await GetEntitiesAsync()).Where(e => e.WasViewed && !e.IsDeleted).ToList();
+    public async Task<List<Entity>> GetReadOnly() => (await GetEntitiesAsync()).Where(e => e.ReadOnly && !e.IsDeleted).ToList();
+
+    public async Task<List<Entity>> GetEntitiesAsync()
+    {
+        var randomDelay = Random.Shared.Next(1000, 3000);
+        await Task.Delay(randomDelay);
+        return DummyItems;
+    }
 
     private static List<string> GetAllIcons()
     {

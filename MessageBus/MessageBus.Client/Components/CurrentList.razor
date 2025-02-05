@@ -2,7 +2,7 @@
 @using MessageBusSample.Client.Services
 @inject EntityService EntityService
 
-<GenericList GetItems="GetCurrent" Title="Current">
+<GenericList GetItems="EntityService.GetCurrent" Title="Current">
     <ListItemContent>
         <GenericListItem Entity="context">
             <MenuContent>
@@ -15,5 +15,4 @@
 </GenericList>
 
 @code {
-    Func<List<Entity>> GetCurrent => () => EntityService.GetCurrent;
 }

@@ -1,19 +1,16 @@
-﻿@using MessageBusSample.Client.Services
+﻿@using MudBlazor.Utilities
+@using ReactiveUI
+@using MessageBusSample.Client.Services
 @using MessageBusSample.Client.Components.Actions
 @using MessageBusSample.Client.Components.Actions.Rename;
 
 <MudStack Row AlignItems="AlignItems.Start">
     <MudIcon Icon="@Entity.Icon" />
-    <MudText>@Entity.Name</MudText>
+    <MudText Style="@TextStyleBuilder">@Entity.Name</MudText>
     <MudMenu Dense Class="ml-auto" Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small">
-@*         <DeleteAction EntityId="@Entity.Id"></DeleteAction>
-        <RenameAction EntityId="@Entity.Id" />
-        <MudMenuItem>View</MudMenuItem>
-        <MudMenuItem>Edit</MudMenuItem> *@
         @MenuContent
     </MudMenu>
 </MudStack>
-
 
 @code {
     [Parameter, EditorRequired]
@@ -21,4 +18,34 @@
 
     [Parameter]
     public RenderFragment? MenuContent { get; set; }
+
+    private bool isToBeDeleted = false;
+    private bool isToBeRenamed = false;
+
+    protected override void OnInitialized()
+    {
+        MessageBus.Current.Listen<InitDeleteActionMessage>().Subscribe(message =>
+        {
+            if (Entity.Id == message.EntityId)
+            {
+                isToBeDeleted = true;
+                StateHasChanged();
+            }
+        });
+
+        MessageBus.Current.Listen<InitRenameActionMessage>().Subscribe( message =>
+        {
+            if (Entity.Id == message.EntityId)
+            {
+                isToBeRenamed = true;
+                StateHasChanged();
+            }
+        });
+    }
+
+    private string TextStyleBuilder => new StyleBuilder()
+        .AddStyle("text-decoration", "line-through", isToBeDeleted) // Strikethrough if deleted
+        .AddStyle("font-style", "italic", isToBeRenamed)            // Italic if renamed
+        .Build();
 }
+

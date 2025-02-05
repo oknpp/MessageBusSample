@@ -1,12 +1,11 @@
 ﻿@using MessageBusSample.Client.Services
 @inject EntityService EntityService
 
-<GenericList GetItems="GetReadOnly" Title="ReadOnly">
+<GenericList GetItems="EntityService.GetReadOnly" Title="ReadOnly">
     <ListItemContent>
         <GenericListItem Entity="context"></GenericListItem>
     </ListItemContent>
 </GenericList>
 
 @code {
-    Func<List<Entity>> GetReadOnly => () => EntityService.GetReadOnly;
 }

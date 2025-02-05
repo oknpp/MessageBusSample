@@ -1,3 +1,3 @@
 ﻿namespace MessageBusSample.Client.Components.Actions.Rename;
 
-public record ResolveRenameActionMessage();
+public record ResolveRenameActionMessage(int EntityId);

@@ -16,7 +16,7 @@
         </MudCardHeader>
         <MudCardContent>
             <div class="scrollable-list">
-                <MudVirtualize Items="@GetItems()">
+                <MudVirtualize Items="@_items">
                     @ListItemContent(context)
                 </MudVirtualize>
             </div>
@@ -24,34 +24,43 @@
     </MudCard>
 </MudPaper>
 
-
 @code {
-        [Parameter]
-        public string Title { get; set; }
+    [Parameter]
+    public string Title { get; set; }
 
-        [Parameter, EditorRequired]
-        public Func<List<T>> GetItems { get; set; } = default!;
+    [Parameter, EditorRequired]
+    public Func<Task<List<T>>> GetItems { get; set; } = default!;
 
-        [Parameter, EditorRequired]
-        public RenderFragment<T> ListItemContent { get; set; } = null!;
+    [Parameter, EditorRequired]
+    public RenderFragment<T> ListItemContent { get; set; } = null!;
 
-        IDisposable? _subscription;
+    private List<T>? _items;
 
-    protected override void OnInitialized()
+    IDisposable? _subscription;
+
+    protected override async Task OnInitializedAsync()
     {
-        _subscription = MessageBus.Current.Listen<ResolvedDeleteActionMessage>().Subscribe(message =>
+        _subscription = MessageBus.Current.Listen<ResolvedDeleteActionMessage>().Subscribe(async message =>
             {
-                InvokeAsync(StateHasChanged);
+                await InvokeAsync(ServerData);
                 Console.WriteLine($"Received ResolvedDeleteActionMessage for {message.EntityId}");
             });
 
-        MessageBus.Current.Listen<ResolveRenameActionMessage>().Subscribe(message =>
+        MessageBus.Current.Listen<ResolveRenameActionMessage>().Subscribe(async message =>
         {
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(ServerData);
             Console.WriteLine($"Received InitRenameActionMessage for doesnt matter");
         });
 
+        _items = await GetItems();
+
         base.OnInitialized();
+    }
+
+    public async Task ServerData()
+    {
+        _items = await GetItems();
+        StateHasChanged();
     }
 
     public void Dispose()

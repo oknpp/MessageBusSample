@@ -1,12 +1,11 @@
 ﻿@using MessageBusSample.Client.Services
 @inject EntityService EntityService
 
-<GenericList GetItems="@GetDeleted" Title="Deleted">
+<GenericList GetItems="@EntityService.GetDeleted" Title="Deleted">
     <ListItemContent>
         <GenericListItem Entity="context"></GenericListItem>
     </ListItemContent>
 </GenericList>
 
 @code {
-    Func<List<Entity>> GetDeleted => () => EntityService.GetDeleted;
 }

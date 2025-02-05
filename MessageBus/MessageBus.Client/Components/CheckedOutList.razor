@@ -3,7 +3,7 @@
 @using MessageBusSample.Client.Services
 @inject EntityService EntityService
 
-<GenericList GetItems="GetCheckedOut" Title="CheckedOut">
+<GenericList GetItems="EntityService.GetCheckedOut" Title="CheckedOut">
     <ListItemContent>
         <GenericListItem Entity="context">
             <MenuContent>
@@ -18,5 +18,4 @@
 </GenericList>
 
 @code {
-    Func<List<Entity>> GetCheckedOut => () => EntityService.GetCheckedOut;
 }
