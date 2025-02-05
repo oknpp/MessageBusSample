@@ -1,6 +1,7 @@
 ﻿@using MessageBusSample.Client.Components.Actions.Rename
 @using ReactiveUI
 @using MessageBusSample.Client.Components.Actions
+@using System.Reactive.Disposables
 
 @implements IDisposable
 
@@ -36,22 +37,27 @@
 
     private List<T>? _items;
 
-    IDisposable? _subscription;
+    private readonly CompositeDisposable _disposables = new CompositeDisposable();
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        _subscription = MessageBus.Current.Listen<ResolvedDeleteActionMessage>().Subscribe(async message =>
+        var deletedSubscription = MessageBus.Current.Listen<ResolvedDeleteActionMessage>().Subscribe(async message =>
             {
                 await InvokeAsync(ServerData);
                 Console.WriteLine($"Received ResolvedDeleteActionMessage for {message.EntityId}");
             });
 
-        MessageBus.Current.Listen<ResolveRenameActionMessage>().Subscribe(async message =>
+        var renamedSubscription = MessageBus.Current.Listen<ResolveRenameActionMessage>().Subscribe(async message =>
         {
             await InvokeAsync(ServerData);
             Console.WriteLine($"Received InitRenameActionMessage for doesnt matter");
         });
 
+        _disposables.Add(deletedSubscription);
+        _disposables.Add(renamedSubscription);
+        
         _items = await GetItems();
 
         base.OnInitialized();
@@ -66,7 +72,7 @@
     public void Dispose()
     {
         // Clean up resources
-        _subscription?.Dispose();
+        _disposables.Dispose();
         Console.WriteLine("Component disposed!");
     }
 }

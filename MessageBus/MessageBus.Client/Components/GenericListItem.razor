@@ -3,6 +3,9 @@
 @using MessageBusSample.Client.Services
 @using MessageBusSample.Client.Components.Actions
 @using MessageBusSample.Client.Components.Actions.Rename;
+@using System.Reactive.Disposables
+
+@implements IDisposable
 
 <MudStack Row AlignItems="AlignItems.Start">
     <MudIcon Icon="@Entity.Icon" />
@@ -22,9 +25,11 @@
     private bool isToBeDeleted = false;
     private bool isToBeRenamed = false;
 
+    private readonly CompositeDisposable _disposables = new CompositeDisposable();
+
     protected override void OnInitialized()
     {
-        MessageBus.Current.Listen<InitDeleteActionMessage>().Subscribe(message =>
+        var deletedSubscription = MessageBus.Current.Listen<InitDeleteActionMessage>().Subscribe(message =>
         {
             if (Entity.Id == message.EntityId)
             {
@@ -33,7 +38,7 @@
             }
         });
 
-        MessageBus.Current.Listen<InitRenameActionMessage>().Subscribe( message =>
+        var renamedSubscription = MessageBus.Current.Listen<InitRenameActionMessage>().Subscribe(message =>
         {
             if (Entity.Id == message.EntityId)
             {
@@ -41,6 +46,11 @@
                 StateHasChanged();
             }
         });
+
+        _disposables.Add(deletedSubscription);
+        _disposables.Add(renamedSubscription);
+
+        base.OnInitialized();
     }
 
     protected override void OnParametersSet()
@@ -54,5 +64,10 @@
     .AddStyle("text-decoration", "line-through", isToBeDeleted) // Strikethrough if deleted
         .AddStyle("font-style", "italic", isToBeRenamed)            // Italic if renamed
         .Build();
+
+    public void Dispose()
+    {
+        _disposables.Dispose();
+    }
 }
 

@@ -6,29 +6,35 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System.Reactive.Disposables;
 using System.Reflection;
+using System.Security.AccessControl;
 
 namespace MessageBusSample.Client.Services;
 
-public class EntityService
+public class EntityService : IDisposable
 {
     private static readonly List<string> AllIcons = GetAllIcons();
 
     public List<Entity> DummyItems { get; }
 
+    private readonly CompositeDisposable _disposables = new CompositeDisposable();
+
     public EntityService()
     {
         DummyItems = GenerateRandomEntities(30); // Erzeugt 10 zufällige Einträge
 
-        MessageBus.Current.Listen<InitDeleteActionMessage>().Subscribe(action =>
+        var deletedSubscription = MessageBus.Current.Listen<InitDeleteActionMessage>().Subscribe(action =>
         {
             DeleteEntity(action.EntityId);
         });
 
 
-        MessageBus.Current.Listen<InitRenameActionMessage>().Subscribe(action =>
+        var renamedSubscription = MessageBus.Current.Listen<InitRenameActionMessage>().Subscribe(action =>
         {
             RenameEntity(action.EntityId, action.NewName);
         });
+
+        _disposables.Add(deletedSubscription);
+        _disposables.Add(renamedSubscription);
     }
 
     private void RenameEntity(int entityId, string newName)
@@ -118,6 +124,11 @@ public class EntityService
             .Where(p => p.PropertyType == typeof(string))
             .Select(p => (string)p.GetValue(null)!)
             .ToList();
+    }
+
+    public void Dispose()
+    {
+        _disposables.Dispose();
     }
 }
 
