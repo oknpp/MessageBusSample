@@ -1,14 +1,15 @@
-﻿@using ReactiveUI
+﻿@using MessageBusSample.Client.Components.Actions.Rename
+@using ReactiveUI
 @using MessageBusSample.Client.Components.Actions
 
 @implements IDisposable
 
 @typeparam T
 
-<MudPaper>
-    <MudCard>
+<MudPaper Class="mud-height-full">
+    <MudCard Class="mud-height-full">
         <MudCardHeader>
-            <MudText Typo="Typo.h5">
+            <MudText Typo="Typo.subtitle2">
                 @Title
             </MudText>
         </MudCardHeader>
@@ -24,16 +25,16 @@
 
 
 @code {
-    [Parameter]
-    public string Title { get; set; }
+        [Parameter]
+        public string Title { get; set; }
 
-    [Parameter, EditorRequired]
-    public Func<List<T>> GetItems { get; set; } = default!;
+        [Parameter, EditorRequired]
+        public Func<List<T>> GetItems { get; set; } = default!;
 
-    [Parameter, EditorRequired]
-    public RenderFragment<T> ListItemContent { get; set; } = null!;
+        [Parameter, EditorRequired]
+        public RenderFragment<T> ListItemContent { get; set; } = null!;
 
-    IDisposable? _subscription;
+        IDisposable? _subscription;
 
     protected override void OnInitialized()
     {
@@ -42,6 +43,13 @@
                 InvokeAsync(StateHasChanged);
                 Console.WriteLine($"Received ResolvedDeleteActionMessage for {message.EntityId}");
             });
+
+        MessageBus.Current.Listen<ResolveRenameActionMessage>().Subscribe(message =>
+        {
+            InvokeAsync(StateHasChanged);
+            Console.WriteLine($"Received InitRenameActionMessage for doesnt matter");
+        });
+
         base.OnInitialized();
     }
 

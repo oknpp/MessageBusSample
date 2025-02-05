@@ -4,8 +4,6 @@
 
 @using MessageBusSample.Client.Components;
 
-<h3>ListsPage</h3>
-
 <MudGrid>
     <MudItem xs="6">
         <CheckedOutList></CheckedOutList>
@@ -24,7 +22,15 @@
     </MudItem>
 </MudGrid>
 
+@* Required *@
+<MudThemeProvider />
 <MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
 
 @code {
     List<string> dummyItems = new List<string> { "Item 1", "Item 2", "Item 3" };

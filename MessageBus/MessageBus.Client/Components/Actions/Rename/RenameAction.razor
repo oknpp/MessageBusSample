@@ -1,0 +1,30 @@
+﻿@using ReactiveUI
+
+<MudMenuItem OnClick="ExecuteRename" Icon="@Icons.Material.Filled.DriveFileRenameOutline">Rename</MudMenuItem>
+
+@code {
+    [Parameter, EditorRequired]
+    public int EntityId { get; set; } = default!;
+
+    [Inject]
+    private IDialogService DialogService { get; set; } = default!;
+
+    async Task ExecuteRename()
+    {
+        Console.WriteLine("Execute Rename");
+        // Open the dialog and wait for user input
+        var options = new DialogOptions { CloseButton = true, FullWidth = true };
+        var parameters = new DialogParameters { { "EntityId", EntityId } };
+        var dialog = await DialogService.ShowAsync<RenameDialog>("Rename Entity", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (result?.Canceled == false)
+        {
+            string newName = (string)result.Data!;
+
+            // Send the rename message
+            MessageBus.Current.SendMessage(new InitRenameActionMessage(EntityId, newName));
+        }
+    }
+}

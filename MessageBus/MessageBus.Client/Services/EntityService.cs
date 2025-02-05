@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using MessageBusSample.Client.Components.Actions;
+using MessageBusSample.Client.Components.Actions.Rename;
 using MudBlazor;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -22,6 +23,34 @@ public class EntityService
         {
             DeleteEntity(action.EntityId);
         });
+
+
+        MessageBus.Current.Listen<InitRenameActionMessage>().Subscribe(action =>
+        {
+            RenameEntity(action.EntityId, action.NewName);
+        });
+    }
+
+    private void RenameEntity(int entityId, string newName)
+    {
+        var toRename = DummyItems.FirstOrDefault(e => e.Id == entityId);
+        Console.WriteLine($"Received DeleteMessage for {toRename?.Name}");
+        if (toRename != null)
+        {
+            toRename.Name = newName;
+            MessageBus.Current.SendMessage(new ResolveRenameActionMessage());
+        }
+    }
+
+    public void DeleteEntity(int entityId)
+    {
+        var toDelete = DummyItems.FirstOrDefault(e => e.Id == entityId);
+        Console.WriteLine($"Received DeleteMessage for {toDelete?.Name}");
+        if (toDelete != null)
+        {
+            toDelete.IsDeleted = true;
+            MessageBus.Current.SendMessage(new ResolvedDeleteActionMessage(toDelete.Id));
+        }
     }
 
     private List<Entity> GenerateRandomEntities(int count)
@@ -66,17 +95,6 @@ public class EntityService
             .Where(p => p.PropertyType == typeof(string))
             .Select(p => (string)p.GetValue(null)!)
             .ToList();
-    }
-
-    public void DeleteEntity(int entityId)
-    {
-        var toDelete = DummyItems.FirstOrDefault(e => e.Id == entityId);
-        Console.WriteLine($"Received DeleteMessage for {toDelete?.Name}");
-        if (toDelete != null)
-        {
-            toDelete.IsDeleted = true;
-            MessageBus.Current.SendMessage(new ResolvedDeleteActionMessage(toDelete.Id));
-        }
     }
 }
 

@@ -1,6 +1,5 @@
 ﻿.scrollable-list {
-    max-height: 300px; /* Adjust the height as needed */
-    height: 100%; /* Ensures the list takes up the full height of its container */
+    max-height: 250px; /* Adjust the height as needed */
     overflow-y: auto; /* Enables vertical scrolling */
     padding: 0px;
 }
