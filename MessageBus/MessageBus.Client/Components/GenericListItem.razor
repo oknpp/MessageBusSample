@@ -43,8 +43,15 @@
         });
     }
 
+    protected override void OnParametersSet()
+    {
+        isToBeDeleted = false;
+        isToBeRenamed = false;
+        base.OnParametersSet();
+    }
+
     private string TextStyleBuilder => new StyleBuilder()
-        .AddStyle("text-decoration", "line-through", isToBeDeleted) // Strikethrough if deleted
+    .AddStyle("text-decoration", "line-through", isToBeDeleted) // Strikethrough if deleted
         .AddStyle("font-style", "italic", isToBeRenamed)            // Italic if renamed
         .Build();
 }

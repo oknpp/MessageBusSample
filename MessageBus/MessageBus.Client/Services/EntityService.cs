@@ -108,7 +108,7 @@ public class EntityService
     {
         var randomDelay = Random.Shared.Next(1000, 3000);
         await Task.Delay(randomDelay);
-        return DummyItems;
+        return DummyItems.Select(x => x with { }).ToList();
     }
 
     private static List<string> GetAllIcons()
