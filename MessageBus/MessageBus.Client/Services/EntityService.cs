@@ -132,7 +132,12 @@ public class EntityService : IDisposable
     }
 }
 
-public record Entity
+public interface IdItem
+{
+    int Id { get; set; }
+}
+
+public record Entity : IdItem
 {
     public int Id { get; set; }
     public string Name { get; set; }

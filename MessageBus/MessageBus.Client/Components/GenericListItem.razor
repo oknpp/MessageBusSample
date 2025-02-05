@@ -33,6 +33,7 @@
         {
             if (Entity.Id == message.EntityId)
             {
+                Console.WriteLine("Generic ListItem Received a matching initdeleteMessage");
                 isToBeDeleted = true;
                 StateHasChanged();
             }
@@ -42,6 +43,7 @@
         {
             if (Entity.Id == message.EntityId)
             {
+                Console.WriteLine("Generic ListItem Received a matching initrenameMessage");
                 isToBeRenamed = true;
                 StateHasChanged();
             }
