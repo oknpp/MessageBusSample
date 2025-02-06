@@ -3,6 +3,8 @@
 @using ReactiveUI
 @using MessageBusSample.Client.Components.Actions
 @using System.Reactive.Disposables
+@using System.Reactive.Linq
+@using System.Reactive.Concurrency
 
 @implements IDisposable
 
@@ -48,32 +50,40 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // var deletingSubscription = MessageBus.Current.Listen<InitDeleteActionMessage>().Subscribe(async message =>
-        // {
-        //     if (_items?.Any(x => x.Id == message.EntityId) == true)
-        //     {
-        //         _isLoading = true;
-        //         await InvokeAsync(StateHasChanged);
-        //         Console.WriteLine($"Received InitDeleteActionMessage for {message.EntityId}");
-        //     }
-        // });
-
-        var deletedSubscription = MessageBus.Current.Listen<ResolvedDeleteActionMessage>().Subscribe(async message =>
+        var deletingSubscription = MessageBus.Current
+            .Listen<InitDeleteActionMessage>()
+            .SubscribeOn(TaskPoolScheduler.Default)
+            .ObserveOn(RxApp.TaskpoolScheduler)
+            .Subscribe(async message =>
             {
                 if (_items?.Any(x => x.Id == message.EntityId) == true)
                 {
-                    await InvokeAsync(ServerData);
-                    _isLoading = false;
+                    _isLoading = true;
                     await InvokeAsync(StateHasChanged);
-                    Console.WriteLine($"Received ResolvedDeleteActionMessage for {message.EntityId}");
+                    Console.WriteLine($"Received InitDeleteActionMessage for {message.EntityId}");
                 }
             });
+
+        var deletedSubscription = MessageBus.Current
+            .Listen<ResolvedDeleteActionMessage>()
+            .SubscribeOn(TaskPoolScheduler.Default)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(async message =>
+                {
+                    if (_items?.Any(x => x.Id == message.EntityId) == true)
+                    {
+                        await InvokeAsync(ServerData);
+                        _isLoading = false;
+                        await InvokeAsync(StateHasChanged);
+                        Console.WriteLine($"Received ResolvedDeleteActionMessage for {message.EntityId}");
+                    }
+                });
 
         var renamedSubscription = MessageBus.Current.Listen<ResolveRenameActionMessage>().Subscribe(async message =>
         {
             if (_items?.Any(x => x.Id == message.EntityId) == true)
                 await InvokeAsync(ServerData);
-            Console.WriteLine($"Received InitRenameActionMessage for doesnt matter");
+            Console.WriteLine($"Received InitRenameActionMessage for {message.EntityId}");
         });
 
         _disposables.Add(deletedSubscription);
@@ -87,6 +97,7 @@
     public async Task ServerData()
     {
         _items = await GetItems();
+        StateHasChanged();
     }
 
     public void Dispose()
