@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBusSample", "Message
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBusSample.Client", "MessageBus\MessageBus.Client\MessageBusSample.Client.csproj", "{D860D5C4-6560-4AEB-B6E9-7988A9B161E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBusSample.Tests", "MessageBusSample.Tests\MessageBusSample.Tests.csproj", "{DCFFC1B1-D7DC-474A-8472-D0021018DF77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBusSample.Tests", "MessageBusSample.Tests\MessageBusSample.Tests.csproj", "{DCFFC1B1-D7DC-474A-8472-D0021018DF77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
